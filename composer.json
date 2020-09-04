@@ -1,0 +1,16 @@
+{
+    "name": "vender/terry",
+    "description": "shopping cart",
+    "authors": [
+        {
+            "name": "terryhuangchungyo",
+            "email": "terry_huang@mail.chungyo.net"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "classmap": [
+            "cores"
+        ]
+    }
+}

@@ -1,0 +1,64 @@
+-- 關鍵字: 會員/管理員 訂單 商品
+
+DROP DATABASE IF EXISTS PID;
+CREATE DATABASE PID;
+USE PID;
+
+DROP TABLE IF EXISTS Users;
+CREATE TABLE Users (
+    userId varchar(30) primary key,   -- 使用者ID
+    password char(64) not null,      -- 密碼
+    firstName varchar(20) not null,  -- 姓
+    lastName varchar(20) not null,   -- 名
+    birthDate DATE,                  -- 生日
+    active boolean default true,     -- 是否被禁用
+    type tinyint default 0           -- 會員類型 0 一般會員 1 管理員
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS Products;
+CREATE TABLE Products (
+    productId int primary key auto_increment,  -- 產品編號
+    productName varchar(30) not null,          -- 產品名稱
+    productDesc varchar(50),                   -- 產品描述
+    price int not null,                        -- 產品價格
+    intoCart int default 0,                    -- 加入購物車的次數
+    createDate date not null,                  -- 加入的時間
+    active boolean                             -- 是否上架
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS Orders;
+CREATE TABLE Orders (
+    orderId int primary key auto_increment,   -- 訂單編號
+    userId varchar(30) not null,              -- 使用者ID
+    date datetime not null,                   -- 下訂單日期
+    modify boolean                            -- 修改請求
+    FOREIGN KEY ( userId ) REFERENCES Users( userId ) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS OrderDetails;
+CREATE TABLE OrderDetails (
+    orderId int not null,                     -- 訂單編號
+    productId int not null,                   -- 產品編號
+    value int default 1,                      -- 數量
+    FOREIGN KEY ( orderId ) REFERENCES Orders( orderId ) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY ( productId ) REFERENCES Products( productId ) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT u_OrderDetail_Id UNIQUE ( orderId, productId )
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS Scores;
+CREATE TABLE Scores (
+    userId varchar(30) not null,              -- 使用者ID
+    productId int not null,                   -- 產品編號
+    scores tinyint default 0,                 -- 分數
+    FOREIGN KEY ( userId ) REFERENCES Users( userId ) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY ( productId ) REFERENCES Products( productId ) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT u_Score_Id UNIQUE ( userId, productId )
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS Modifies;
+CREATE TABLE Modifies (
+    modifyId int primary key auto_increment, --  修改請求ID
+    orderId int,                             --  訂單ID
+    message varchar(50)                      --  訊息
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

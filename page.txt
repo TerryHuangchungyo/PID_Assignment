@@ -1,0 +1,19 @@
+-- 頁面
+/ | /shop/home   :GET  商店網站首頁
+/shop/cart       :GET  購物車頁面
+/shop/login      :GET  登入頁面
+/shop/signup     :GET  註冊
+
+/admin/home      :GET 管理端首頁
+/admin/product   :GET 管理端管理商品頁面
+/admin/user      :GET 管理端管理會員頁面
+/admin/order     :GET 訂單管理頁面
+
+-- 邏輯處理
+/user/signup     :POST 會員註冊
+/user/login      :POST 會員登入
+/order           :POST 新增訂單
+
+-- API
+/product         :GET 商品
+           
