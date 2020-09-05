@@ -19,7 +19,7 @@ class Database {
     }
 
     public static function getDatabase() {
-        if( self::$db == null ) {
+        if( self::$db == null || self::$db->dblink == null ) {
             $db = new Database();
         }
         return $db->dblink;

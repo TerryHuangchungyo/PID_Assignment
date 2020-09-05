@@ -3,17 +3,19 @@
 /shop/cart       :GET  購物車頁面
 /shop/login      :GET  登入頁面
 /shop/signup     :GET  註冊
+/shop/user       :GET  會員中心
 
-/admin/home      :GET 管理端首頁
+/admin/login     :GET 管理端登入
 /admin/product   :GET 管理端管理商品頁面
 /admin/user      :GET 管理端管理會員頁面
 /admin/order     :GET 訂單管理頁面
 
 -- 邏輯處理
-/user/signup     :POST 會員註冊
-/user/login      :POST 會員登入
+/shop/signup     :POST 會員註冊
+/shop/login      :POST 會員登入
+/admin/login     :POST 管理端登入
 /order           :POST 新增訂單
 
 -- API
-/product         :GET 商品
-           
+/product/[:name]  :GET 商品
+/order/[:orderId] :GET 訂單
