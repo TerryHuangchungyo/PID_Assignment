@@ -30,7 +30,7 @@
                 </div>
                 <div class="form-group">
                     <label for="password">信箱</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="name@domain.com" required>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="name@domain.com" pattern="^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$" required>
                 </div>
                 <div class="form-group">
                     <label for="password">密碼</label>

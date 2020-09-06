@@ -1,6 +1,8 @@
 <?php
 class ShopController extends Controller {
     public function home() {
+        $_SESSION["lastPage"] = "shop/home";
+
         $data["title"] = "購物商城";
         $data["pageName"] = "首頁";
         $data["navBrand"] = ["link" => Web::root."shop/home",
@@ -9,10 +11,13 @@ class ShopController extends Controller {
                             Web::root."shop/cart" => "購物車"];
         $data["navListRHS"] = [ Web::root."shop/login" => "登入",
                             Web::root."shop/signup" => "註冊"];
+        $data["script"] = [ Web::root."views/script/shop/home.js"];
         if( $_SESSION["user"] != "guest" ) {
             $data["navListLHS"][Web::root."shop/user"] = "會員中心";
             $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
         }
+
+        $data["products"] = $this->model("Products")->load( ["productId", "name", "productDesc", "price", "image"], null, null, null, 1 );
         $this->view( "shop/home", $data );
     }
 
@@ -30,6 +35,30 @@ class ShopController extends Controller {
             $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
         }
         $this->view( "shop/cart", $data );
+    }
+
+    public function intro() {
+        $productId = func_get_arg(1);
+
+        $data["title"] = "商品介紹";
+        $data["pageName"] = "首頁";
+        $data["navBrand"] = ["link" => Web::root."shop/home",
+                            "value" => "GoodBuy"];
+        $data["navListLHS"] = [ Web::root."shop/home" => "首頁",
+                            Web::root."shop/cart" => "購物車"];
+        $data["navListRHS"] = [ Web::root."shop/login" => "登入",
+                            Web::root."shop/signup" => "註冊"];
+        $data["lastPage"] = $_SESSION["lastPage"];
+
+        $product = $this->model("Product");
+        $product->load( ["productId","name","productDesc","image","price","createDate"], $productId );
+        $data["product"] = $product;
+
+        if( $_SESSION["user"] != "guest" ) {
+            $data["navListLHS"][Web::root."shop/user"] = "會員中心";
+            $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
+        }
+        $this->view( "shop/intro", $data );
     }
 
     public function login() {
@@ -64,6 +93,9 @@ class ShopController extends Controller {
                         $data["userId"] = $requestData["userId"];
                         $data["feedbacks"] = "輸入的帳號或密碼錯誤";
                     }
+                } else {
+                    $data["userId"] = $requestData["userId"];
+                    $data["feedbacks"] = "輸入的帳號或密碼錯誤";
                 }
 
                 $this->view( "shop/login", $data );

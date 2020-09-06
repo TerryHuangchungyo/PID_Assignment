@@ -45,7 +45,7 @@ class Router {
         }
 
         $ruleArr = strtolower( $this->method )."s";
-        if( isset( $$ruleArr ) ) {
+        if( isset( $this->$ruleArr ) ) {
             foreach( $this->$ruleArr as $rule => $callback ) {
 
                 if( preg_match($rule, $this->url, $match) ) {

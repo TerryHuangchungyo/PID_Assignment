@@ -25,8 +25,15 @@ CREATE TABLE Products (
     price int not null,                        -- 產品價格
     intoCart int default 0,                    -- 加入購物車的次數
     createDate date not null,                  -- 加入的時間
-    active boolean                             -- 是否上架
+    active boolean default true               -- 是否上架
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO Products( name, productDesc, price, createDate, image ) VALUES
+( "超型太陽眼鏡", "抵抗太陽光，武鬥大會克制天津飯。",  299, CURDATE(), "1.png" ),
+( "登山型男背包", "登山必備，越野首選。",  799, CURDATE(), "2.png" ),
+( "科技感無線耳機", "穿戴舒適，運動聽音樂必備裝備。",  1099, CURDATE(), "3.png" ),
+( "潮。板鞋", "帶你走向時代尖端。",  1700, CURDATE(), "4.png" ),
+( "超重力。重低音耳機", "極致降躁，穩定輸出。",  4200, CURDATE(), "5.png" );
 
 DROP TABLE IF EXISTS Orders;
 CREATE TABLE Orders (

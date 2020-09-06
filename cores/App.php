@@ -14,7 +14,17 @@ class App {
             $_SESSION["user"] = "guest";
         }
 
+        // 設置購物車
+        if( !isset($_SESSION["cart"]) ) {
+            $_SESSION["cart"] = [];
+        }
+        
         $router = new Router( $_GET["url"] );
+
+        $router->post( "/^\/?cart\/?$/", function ( $match, $requestData ) {
+            $productId = $requestData["productId"];
+            $_SESSION["cart"][$productId] = 1;
+        });
 
         $router->add( "/\/?(?P<controller>\w+)(\/(?P<method>\w+))?(\/(?P<param>.+))?/", function( $match, $requestData ){
             $controllerName = "{$match["controller"]}Controller";

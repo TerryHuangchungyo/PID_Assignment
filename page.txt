@@ -13,9 +13,11 @@
 -- 邏輯處理
 /shop/signup     :POST 會員註冊
 /shop/login      :POST 會員登入
+/shop/search     :POST 搜尋商品
 /admin/login     :POST 管理端登入
 /order           :POST 新增訂單
 
 -- API
-/product/[:name]  :GET 商品
+/products/[:name]?(search=name)?&offsets=number&limits=number     :GET 商品清單
+/product/[:productId]  :GET 商品
 /order/[:orderId] :GET 訂單

@@ -8,19 +8,24 @@
             <button class="btn btn-light my-2 my-sm-0" type="button">搜尋</button>
         </form>
     </div><hr>
-    <div class="container row d-flex justify-content-around mx-auto my-3">
-        <?php for( $i = 0; $i < 8; $i++):?>
+    <div id="productList" class="container row d-flex justify-content-around mx-auto my-3">
+        <?php foreach( $data["products"] as $row):?>
         <div class="card my-2" style="width: 250px;">
-            <img src="<?=Web::root?>productImg/noimage.png" class="card-img-top" alt="商品圖片">
+            <img src="<?=Web::root?>productImg/<?=$row["image"]?>" class="card-img-top" alt="商品圖片">
             <div class="card-body">
-                <h5 class="card-title">竹蜻蜓 $2000</h5>
-                <p class="card-text">在天空中翱翔。內藏超小型電池，可時速八十公里連續飛行八小時。</p>
+                <h5 class="card-title"><a href="<?=Web::root?>shop/intro/<?=$row["productId"]?>" class="text-dark"><?=htmlspecialchars($row["name"])?></a></h5>
+                <h5 class="card-text">NT $<?=$row["price"]?></h5>
                 <div class="d-flex justify-content-around">
-                    <button class="btn btn-primary">加入購物車</a>
-                    <button class="btn btn-danger">直接購買</a>
+                    <a data-productId="<?=$row["productId"]?>" class="cart btn btn-primary <?=isset($_SESSION["cart"][$row["productId"]])?"disabled":""?>"><?=isset($_SESSION["cart"][$row["productId"]])?"已加入":"加入購物車"?></a>
+                    <a class="btn btn-danger">直接購買</a>
                 </div>   
             </div>
         </div>
-        <?php endfor;?>
+        <?php endforeach;?>
     </div>
 </section>
+<?php if(isset($data["script"])):?>
+    <?php foreach( $data["script"] as $script ):?>
+        <script src="<?=$script?>"></script>
+    <?php endforeach; ?>
+<?php endif;?>
