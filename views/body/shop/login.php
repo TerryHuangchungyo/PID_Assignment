@@ -7,7 +7,7 @@
             <form action="#" method="post">
                 <div class="form-group">
                     <label for="userId">帳號</label>
-                    <input type="text" class="form-control" id="userId" name="userId" placeholder="請輸入會員帳號" required>
+                    <input type="text" class="form-control" id="userId" name="userId" value="<?=isset($data["userId"])?$data["userId"]:""?>" placeholder="請輸入會員帳號" required>
                     <small id="userHelp" class="form-text text-muted">為了帳號安全，請不要將密碼透露給其他人</small>
                 </div>
                 <div class="form-group">
@@ -18,7 +18,10 @@
                     <input type="checkbox" class="form-check-input" id="rememberCheckBox">
                     <label class="form-check-label" for="rememberCheckBox">記住我</label>
                 </div>
-                <button type="submit" class="float-right btn btn-dark" name="login">登入</button>
+                <div>
+                <small class="text-danger"><?=isset($data["feedbacks"])?$data["feedbacks"]:""?></small>
+                </div>
+                <button type="submit" class="float-right btn btn-dark" name="login" value="login">登入</button>
             </form>
         </div>
     </div>

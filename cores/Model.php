@@ -92,4 +92,24 @@ abstract class Model {
             }
         }
     }
+
+    public function delete() {
+        if( $this->isLoad  ) {
+            $dblink = $this->getDatabase();
+            $tbName = $this->getTbName();
+            $pidName = $this->getPidName();
+
+            $deletePrestr = "DELETE FROM $tbName WHERE $pidName = ?";
+            $params = [$this->$pidName];
+
+            $dblink->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            try {
+                $stmt = $dblink->prepare( $deletePrestr );
+                $stmt->execute($params);
+                return true;
+            } catch( Exception $e ) {
+                return false;
+            }
+        }
+    }
 }

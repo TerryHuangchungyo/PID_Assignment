@@ -8,8 +8,7 @@ DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
     userId varchar(30) primary key,  -- 使用者ID
     password char(64) not null,      -- 密碼
-    firstName varchar(20) not null,  -- 姓
-    lastName varchar(20) not null,   -- 名
+    name varchar(40) not null,       -- 姓名
     birthDate DATE,                  -- 生日
     phone varchar(20) not null,      -- 電話
     email varchar(50) not null,      -- 電子郵件
@@ -34,7 +33,7 @@ CREATE TABLE Orders (
     orderId int primary key auto_increment,   -- 訂單編號
     userId varchar(30) not null,              -- 使用者ID
     date datetime not null,                   -- 下訂單日期
-    modify boolean,                           -- 修改請求
+    modify tinyint,                           -- 修改請求 0 未修改 1 請求修改 2 已修改
     FOREIGN KEY ( userId ) REFERENCES Users( userId ) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -61,7 +60,7 @@ CREATE TABLE Scores (
 DROP TABLE IF EXISTS ModifyRequest;
 CREATE TABLE ModifyRequest (
     requestId int primary key auto_increment, --  修改請求ID
-    orderId int,                             --  訂單ID
-    message varchar(50)                      --  訊息
+    orderId int,                              --  訂單ID
+    message varchar(150)                      --  訊息
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

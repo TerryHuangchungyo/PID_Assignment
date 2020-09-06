@@ -8,9 +8,10 @@
             <button class="btn btn-light my-2 my-sm-0" type="button">搜尋</button>
         </form>
     </div><hr>
-    <div class="container row d-flex justify-content-between mx-auto my-3">
+    <div class="container row d-flex justify-content-around mx-auto my-3">
+        <?php for( $i = 0; $i < 8; $i++):?>
         <div class="card my-2" style="width: 250px;">
-            <img src="..." class="card-img-top" alt="...">
+            <img src="<?=Web::root?>productImg/noimage.png" class="card-img-top" alt="商品圖片">
             <div class="card-body">
                 <h5 class="card-title">竹蜻蜓 $2000</h5>
                 <p class="card-text">在天空中翱翔。內藏超小型電池，可時速八十公里連續飛行八小時。</p>
@@ -20,82 +21,6 @@
                 </div>   
             </div>
         </div>
-        <div class="card my-2" style="width: 250px;">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">竹蜻蜓</h5>
-                <p class="card-text">在天空中翱翔。內藏超小型電池，可時速八十公里連續飛行八小時。</p>
-                <div class="d-flex justify-content-between">
-                    <button class="btn btn-primary">加入購物車</a>
-                    <button class="btn btn-danger">直接購買</a>
-                </div>   
-            </div>
-        </div>
-        <div class="card my-2" style="width: 250px;">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">竹蜻蜓</h5>
-                <p class="card-text">在天空中翱翔。內藏超小型電池，可時速八十公里連續飛行八小時。</p>
-                <div class="d-flex justify-content-between">
-                    <button class="btn btn-primary">加入購物車</a>
-                    <button class="btn btn-danger">直接購買</a>
-                </div>   
-            </div>
-        </div>
-        <div class="card my-2" style="width: 250px;">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">竹蜻蜓</h5>
-                <p class="card-text">在天空中翱翔。內藏超小型電池，可時速八十公里連續飛行八小時。</p>
-                <div class="d-flex justify-content-between">
-                    <button class="btn btn-primary">加入購物車</a>
-                    <button class="btn btn-danger">直接購買</a>
-                </div>   
-            </div>
-        </div>
-        <div class="card my-2" style="width: 250px;">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">竹蜻蜓</h5>
-                <p class="card-text">在天空中翱翔。內藏超小型電池，可時速八十公里連續飛行八小時。</p>
-                <div class="d-flex justify-content-between">
-                    <button class="btn btn-primary">加入購物車</a>
-                    <button class="btn btn-danger">直接購買</a>
-                </div>   
-            </div>
-        </div>
-        <div class="card my-2" style="width: 250px;">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">竹蜻蜓</h5>
-                <p class="card-text">在天空中翱翔。內藏超小型電池，可時速八十公里連續飛行八小時。</p>
-                <div class="d-flex justify-content-between">
-                    <button class="btn btn-primary">加入購物車</a>
-                    <button class="btn btn-danger">直接購買</a>
-                </div>   
-            </div>
-        </div>
-        <div class="card my-2" style="width: 250px;">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">竹蜻蜓</h5>
-                <p class="card-text">在天空中翱翔。內藏超小型電池，可時速八十公里連續飛行八小時。</p>
-                <div class="d-flex justify-content-between">
-                    <button class="btn btn-primary">加入購物車</a>
-                    <button class="btn btn-danger">直接購買</a>
-                </div>   
-            </div>
-        </div>
-        <div class="card my-2" style="width: 250px;">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">竹蜻蜓</h5>
-                <p class="card-text">在天空中翱翔。內藏超小型電池，可時速八十公里連續飛行八小時。</p>
-                <div class="d-flex justify-content-between">
-                    <button class="btn btn-primary">加入購物車</a>
-                    <button class="btn btn-danger">直接購買</a>
-                </div>   
-            </div>
-        </div>
+        <?php endfor;?>
     </div>
 </section>

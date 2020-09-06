@@ -16,13 +16,14 @@ class App {
 
         $router = new Router( $_GET["url"] );
 
-        $router->on( "/\/?(?P<controller>\w+)(\/(?P<method>\w+))?(\/(?P<param>.+))?/", function( $match ){
+        $router->add( "/\/?(?P<controller>\w+)(\/(?P<method>\w+))?(\/(?P<param>.+))?/", function( $match, $requestData ){
             $controllerName = "{$match["controller"]}Controller";
             $method = $match["method"] ? $match["method"]: "default";
+            $param[] = $requestData; 
             if( isset( $match["param"])) {
-                $param = explode( "/", $match["param"]);
+                $param = array_merge( $param, explode( "/", $match["param"]));
             } else {
-                $param = Array();
+                $param = array_merge( $param, Array());
             }
 
             @include_once "controllers/$controllerName.php";
@@ -36,7 +37,7 @@ class App {
             }
         });
 
-        $router->on( "default", function(){
+        $router->add( "default", function(){
             header("Location: ".Web::root."shop/home");
         });
 
