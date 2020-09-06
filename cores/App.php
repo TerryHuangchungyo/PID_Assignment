@@ -21,7 +21,7 @@ class App {
         
         $router = new Router( $_GET["url"] );
 
-        $router->post( "/^\/?cart\/?$/", function ( $match, $requestData ) {
+        $router->put( "/^\/?cart\/?$/", function ( $match, $requestData ) {
             $productId = $requestData["productId"];
             $_SESSION["cart"][$productId] = 1;
         });

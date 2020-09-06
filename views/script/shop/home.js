@@ -7,7 +7,7 @@ $(document).ready(function(){
         const _this = $(this);
         $.ajax({
             url: "/PID_Assignment/cart",
-            type: "post",
+            type: "put",
             data: dataToServer
         }).done( function(){
             _this.text("已加入");
