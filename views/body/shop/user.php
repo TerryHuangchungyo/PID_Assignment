@@ -20,18 +20,20 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <?php foreach( $data["orders"] as $order): ?>
                             <tr>
-                                <th scope="row">14</th>
-                                <td>2020-08-26 12:00:16</td>
-                                <td><a class="text-info">查看</a></td>
+                                <th scope="row"><?=$order["orderId"]?></th>
+                                <td><?=$order["date"]?></td>
+                                <td><a href="<?=Web::root."shop/order/".$order["orderId"]?>" class="text-info">查看</a></td>
                             </tr>
+                            <?php endforeach;?>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th scope="col">合計</th>
                                 <th scope="col"></th>
                                 <th scope="col">
-                                    1 筆訂單
+                                    <?=count($data["orders"])?>筆訂單
                                 </th>
                             </tr>
                         </tfoot>

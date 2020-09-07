@@ -16,6 +16,9 @@ CREATE TABLE Users (
     type tinyint default 0           -- 會員類型 0 一般會員 1 管理員
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+INSERT INTO Users( userId, password, name, phone, email, type )VALUES
+( 'admin', SHA2('admin', 256), 'admin', 0000, 'admin', 1 );
+
 DROP TABLE IF EXISTS Products;
 CREATE TABLE Products (
     productId int primary key auto_increment,  -- 產品編號

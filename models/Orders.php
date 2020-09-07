@@ -2,14 +2,14 @@
 class Orders {
     public function getOrdersByUserId( $columns, $userId, $offsets, $limits ) {
         $dblink = Database::getDatabase();
-        $tbName = DB::ordersTbName;
+        $tbName = DB::orderTbName;
         $pidName = "orderId";
 
         $colstr = implode( ",", $columns );
         $preStmt = "SELECT $colstr FROM $tbName ";
 
         if( $userId ) {
-            $preStmt .= " userId = :userId ";
+            $preStmt .= "WHERE userId = :userId ";
         }
 
         if( $limits ) {
@@ -18,6 +18,8 @@ class Orders {
             } else {
                 $preStmt .= "ORDER BY date DESC limit :limits";
             }
+        } else {
+            $preStmt .= "ORDER BY date DESC";
         }
 
         $stmt = $dblink->prepare( $preStmt );
@@ -29,6 +31,7 @@ class Orders {
         if($stmt->execute()) {
             return $stmt->fetchAll( PDO::FETCH_ASSOC ); 
         } else {
+            var_dump($stmt->errorInfo());
             return [];
         }
     }

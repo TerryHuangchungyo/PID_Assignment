@@ -1,7 +1,8 @@
 <?php
 class ShopController extends Controller {
     public function home() {
-        $_SESSION["lastPage"] = "shop/home";
+        $_SESSION["lastPage"] = [];
+        $_SESSION["lastPage"][] = "shop/home";
 
         $data["title"] = "購物商城";
         $data["pageName"] = "首頁";
@@ -31,7 +32,8 @@ class ShopController extends Controller {
                 exit;
             }
         }
-        $_SESSION["lastPage"] = "shop/cart";
+        $_SESSION["lastPage"] = [];
+        $_SESSION["lastPage"][] = "shop/cart";
 
         $data["title"] = "購物車";
         $data["pageName"] = "購物車";
@@ -103,7 +105,7 @@ class ShopController extends Controller {
                     $data["cart"][] = $row;
                     $data["total"] += $product->price * $value;
                 }
-
+                $_SESSION["lastPage"] = "shop/confirm";
                 $this->view( "shop/confirm", $data );
                 break;
             case "POST":
@@ -144,7 +146,11 @@ class ShopController extends Controller {
         $data["navListRHS"] = [ Web::root."shop/login" => "登入",
                             Web::root."shop/signup" => "註冊"];
         $data["script"] = [ Web::root."views/script/shop/intro.js"];
-        $data["lastPage"] = $_SESSION["lastPage"];
+
+        if( $_SESSION["lastPage"] )
+            $data["lastPage"] = array_pop($_SESSION["lastPage"]);
+        else
+            $data["lastPage"] = "shop/home";
 
         $product = $this->model("Product");
         $product->load( ["productId","name","productDesc","image","price","createDate"], $productId );
@@ -162,6 +168,9 @@ class ShopController extends Controller {
             header("Location: ".Web::root."shop/home");
         }
 
+        $_SESSION["lastPage"] =  [];
+        $_SESSION["lastPage"][] = "shop/user";
+
         $data["title"] = "商品介紹";
         $data["pageName"] = "會員中心";
         $data["navBrand"] = ["link" => Web::root."shop/home",
@@ -171,7 +180,7 @@ class ShopController extends Controller {
                             Web::root."shop/user" => "會員中心" ];
 
         $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
-            
+        $data["orders"] = $this->model("Orders")->getOrdersByUserId(["orderId","date"], $_SESSION["userId"],null, null );
         
         $this->view( "shop/user", $data );
     }
@@ -196,9 +205,14 @@ class ShopController extends Controller {
             case "POST":
                 $requestData = func_get_arg( 0 );
                 $user = $this->model("User");
-                $success = $user->load( ["userId", "password"], $requestData["userId"] );
+                $success = $user->load( ["userId", "password", "active"], $requestData["userId"] );
 
                 if( $success ) {
+                    if( $user->active == 0 ) {
+                        $this->view( "shop/banned", $data );
+                        exit;
+                    }
+
                     if( $user->password == hash("sha256", $requestData["password"])) {
                         $_SESSION["user"] = "user";
                         $_SESSION["userId"] = $requestData["userId"];
@@ -275,6 +289,41 @@ class ShopController extends Controller {
                 $this->view( "shop/signup", $data );
                 break;
         }
+    }
+
+    public function order() {
+        if( func_num_args() != 2 || $_SESSION["user"] == "guest") {
+            header( "Location: ".Web::root."shop/home" );
+            exit;
+        }
+
+        
+        $orderId = func_get_arg( 1 );
+        $order = $this->model("Order");
+        $order->load([ "orderId", "userId", "date" ], $orderId );
+        if( $order->userId != $_SESSION["userId"] ) {
+            header( "Location: ".Web::root."shop/home" );
+            exit;
+        }
+
+        $_SESSION["lastPage"] =  [];
+        $_SESSION["lastPage"][] = "order/".$orderId;
+
+        $data["title"] = "商品介紹";
+        $data["pageName"] = "會員中心";
+        $data["navBrand"] = ["link" => Web::root."shop/home",
+                            "value" => "GoodBuy"];
+        $data["navListLHS"] = [ Web::root."shop/home" => "首頁",
+                            Web::root."shop/cart" => "購物車",
+                            Web::root."shop/user" => "會員中心" ];
+
+        $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
+        $data["orderDetail"] = $this->model("OrderDetails")->getOrderDetailsByOrderId($order->orderId);
+        $data["total"] = 0;
+        foreach( $data["orderDetail"] as $item ) {
+            $data["total"] += $item["price"] * $item["value"];
+        }
+        $this->view("shop/orderDetail", $data);
     }
 
     public function default() {

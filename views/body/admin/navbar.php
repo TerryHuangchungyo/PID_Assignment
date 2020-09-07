@@ -5,18 +5,23 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
+            <?php if( isset($data["navListLHS"])): ?>
             <?php foreach( $data["navListLHS"] as $link => $value ):?>
                 <li class="nav-item <?=($data["pageName"] == $value)?"active":""?>">
                     <a class="nav-link" href="<?=$link?>"><?=$value?></a>
                 </li>
             <?php endforeach; ?>
+            <?php endif;?>
+            
         </ul>
         <ul class="ml-auto navbar-nav">
+            <?php if( isset($data["navListRHS"])): ?>
             <?php foreach( $data["navListRHS"] as $link => $value ):?>
                 <li class="nav-item <?=($data["pageName"] == $value)?"active":""?>">
                     <a class="nav-link" href="<?=$link?>"><?=$value?></a>
                 </li>
             <?php endforeach; ?>
+            <?php endif;?>
         </ul>
     </div>
 </nav>
