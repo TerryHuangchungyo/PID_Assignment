@@ -88,7 +88,7 @@ class AdminController extends Controller {
                             Web::root."admin/user" => "會員管理"];
         $data["navListRHS"] = [ Web::root."admin/logout" => "登出"];
 
-        $data["products"] = $this->model("Products")->load( ["productId", "name", "price", "createDate"], null, null, null, 2 );
+        $data["products"] = $this->model("Products")->load( ["productId", "name", "price", "createDate", "active"], null, null, null, 2 );
         $this->view( "admin/product", $data );
     }
 
@@ -187,6 +187,40 @@ class AdminController extends Controller {
         $user->save(["active"]);
 
         header( "Location: ".Web::root."admin/user");
+        exit;
+    }
+
+    public function shelf() {
+        if( $_SESSION["user"] != "admin") {
+            header( "Location: ".Web::root."shop/home");
+            exit;
+        }
+
+        $productId = func_get_arg(1);
+        $product = $this->model("Product");
+        $product->load(["active", "createDate"], $productId );
+        $product->active = 1;
+        $currentTime = date("Y-m-d", mktime(gmdate("H")+8, gmdate("i"), gmdate("s"), gmdate("m"), gmdate("d"), gmdate("Y")) );
+        $product->createDate = $currentTime;
+        $product->save(["active", "createDate"]);
+
+        header( "Location: ".Web::root."admin/product");
+        exit;
+    }
+
+    public function unshelf() {
+        if( $_SESSION["user"] != "admin") {
+            header( "Location: ".Web::root."shop/home");
+            exit;
+        }
+
+        $productId = func_get_arg(1);
+        $product = $this->model("Product");
+        $product->load(["active"], $productId );
+        $product->active = 0;
+        $product->save(["active"]);
+
+        header( "Location: ".Web::root."admin/product");
         exit;
     }
 
