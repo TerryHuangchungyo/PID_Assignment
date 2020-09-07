@@ -18,7 +18,7 @@ class ShopController extends Controller {
             $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
         }
 
-        $data["products"] = $this->model("Products")->load( ["productId", "name", "productDesc", "price", "image"], null, null, null, 1 );
+        $data["products"] = $this->model("Products")->load( ["productId", "name", "productDesc", "price", "image", "active"], null, null, null, 1 );
         $this->view( "shop/home", $data );
     }
 

@@ -3,5 +3,29 @@
         <h4>
             商品管理
         </h4>
+        <a class="ml-auto btn btn-primary">新增商品</a>
     </div>
+    <table id="productTable" class="table">
+        <thead>
+            <tr>
+                <th scope="col">商品編號</th>
+                <th scope="col">商品名稱</th>
+                <th scope="col">價格</th>
+                <th scope="col">上架時間</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach( $data["products"] as $product ):?>
+                <tr>
+                    <th scope="row"><?=$product["productId"]?></th>
+                    <td><a class="text-dark" href="<?=Web::root."admin/intro/".$product["productId"]?>"><?=$product["name"]?></a></td>
+                    <td>NT $ <?=$product["price"]?></td>
+                    <td><?=$product["createDate"]?></td>
+                    <td scope="col"><a class="text-success">修改</a>|<a class="text-danger">下架</a></td>
+                </tr>
+            <?php endforeach;?>
+        </tbody>
+        <tfoot>
+    </table>
 </section>

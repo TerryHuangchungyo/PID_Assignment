@@ -74,6 +74,11 @@ class AdminController extends Controller {
     }
 
     public function product() {
+        if( $_SESSION["user"] != "admin") {
+            header( "Location: ".Web::root."shop/home");
+            exit;
+        }
+
         $data["title"] = "商品管理";
         $data["pageName"] = "商品管理";
         $data["navBrand"] = ["link" => Web::root."admin/login",
@@ -82,6 +87,8 @@ class AdminController extends Controller {
                             Web::root."admin/order" => "訂單管理",
                             Web::root."admin/user" => "會員管理"];
         $data["navListRHS"] = [ Web::root."admin/logout" => "登出"];
+
+        $data["products"] = $this->model("Products")->load( ["productId", "name", "price", "createDate"], null, null, null, 2 );
         $this->view( "admin/product", $data );
     }
 
