@@ -3,7 +3,7 @@
         <h4>
             商品管理
         </h4>
-        <a class="ml-auto btn btn-primary">新增商品</a>
+        <a href="<?=Web::root."/admin/create"?>" class="ml-auto btn btn-primary">新增商品</a>
     </div>
     <table id="productTable" class="table table-hover">
         <thead>
@@ -11,7 +11,7 @@
                 <th scope="col">商品編號</th>
                 <th scope="col">商品名稱</th>
                 <th scope="col">價格</th>
-                <th scope="col">上架時間</th>
+                <th scope="col">上架日期</th>
                 <th scope="col"></th>
             </tr>
         </thead>

@@ -92,6 +92,28 @@ class AdminController extends Controller {
         $this->view( "admin/product", $data );
     }
 
+    public function create() {
+        if( $_SESSION["user"] != "admin") {
+            header( "Location: ".Web::root."shop/home");
+            exit;
+        }
+
+        $data["title"] = "商品管理";
+        $data["pageName"] = "商品管理";
+        $data["navBrand"] = ["link" => Web::root."admin/login",
+                            "value" => "GoodBuy Administrator"];
+        $data["navListLHS"] = [ Web::root."admin/product" => "商品管理",
+                            Web::root."admin/order" => "訂單管理",
+                            Web::root."admin/user" => "會員管理"];
+        $data["navListRHS"] = [ Web::root."admin/logout" => "登出"];
+        $data["script"] = [ Web::root."views/script/admin/create.js"];
+        $this->view( "admin/create", $data );
+    }
+
+    public function uploadImg() {
+
+    }
+
     public function order() {
         if( $_SESSION["user"] != "admin") {
             header( "Location: ".Web::root."shop/home");
