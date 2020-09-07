@@ -40,7 +40,7 @@ CREATE TABLE Orders (
     orderId int primary key auto_increment,   -- 訂單編號
     userId varchar(30) not null,              -- 使用者ID
     date datetime not null,                   -- 下訂單日期
-    modify tinyint,                           -- 修改請求 0 未修改 1 請求修改 2 已修改
+    modify tinyint default 0,                 -- 修改請求 0 未修改 1 請求修改 2 已修改
     FOREIGN KEY ( userId ) REFERENCES Users( userId ) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

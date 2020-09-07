@@ -1,4 +1,4 @@
-<section class="container vw-75 vh-100 py-4 d-flex justify-content-center">
+<section class="container vw-75 py-4 d-flex justify-content-center">
     <div id="#loginFormContainer" class="container mx-auto" style="width: 500px">
         <h4 class="text-center">會員登入</h4>
         <small id="userHelp" class="text-center text-muted">還沒有帳號? <a href="/PID_Assignment/shop/signup">註冊帳號</a></small>

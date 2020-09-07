@@ -16,7 +16,7 @@
                 <p class="card-text"><?=$data["product"]->productDesc?></p>
                 <p class="card-text">上架時間: <?=$data["product"]->createDate?></p>
                 <div class="d-flex justify-content-end">
-                    <a class="btn btn-primary mr-3">加入購物車</a>
+                    <a data-productId="<?=$data["product"]->productId?>" class="cart mr-3 btn btn-primary <?=isset($_SESSION["cart"][$data["product"]->productId])?"disabled":""?>"><?=isset($_SESSION["cart"][$data["product"]->productId])?"已加入":"加入購物車"?></a>
                     <a class="btn btn-danger">直接購買</a>
                 </div>
                 <a href="<?=Web::root.$data["lastPage"]?>" class="float-right btn btn-white mt-4">返回</a>
@@ -25,3 +25,8 @@
     </div>
     </div>
 </section>
+<?php if(isset($data["script"])):?>
+    <?php foreach( $data["script"] as $script ):?>
+        <script src="<?=$script?>"></script>
+    <?php endforeach; ?>
+<?php endif;?>

@@ -22,11 +22,11 @@ class Router {
     }
 
     public function patch( $rule, $callback ) {
-        $this->patchs( $rule, $callback );
+        $this->patchs[$rule] = $callback;
     }
 
     public function delete( $rule, $callback ) {
-        $this->deletes( $rule, $callback );
+        $this->deletes[$rule] = $callback;
     }
 
     public function run() {
@@ -39,7 +39,7 @@ class Router {
             case "PUT":
             case "PATCH":
             case "DELETE":
-                $arr = parse_str(file_get_contents('php://input'));
+                parse_str(file_get_contents('php://input'), $arr);
                 $request_data = ($arr)?$arr:Array();
                 break;
         }

@@ -22,6 +22,17 @@ class ShopController extends Controller {
     }
 
     public function cart() {
+        $arg_num = func_num_args();
+        if( $arg_num == 2 ) {
+            $option = func_get_arg(1);
+            if( $option == "clear" ) {
+                $_SESSION["cart"] = [];
+                header( "Location: ".Web::root."shop/cart");
+                exit;
+            }
+        }
+        $_SESSION["lastPage"] = "shop/cart";
+
         $data["title"] = "購物車";
         $data["pageName"] = "購物車";
         $data["navBrand"] = ["link" => Web::root."shop/home",
@@ -30,11 +41,95 @@ class ShopController extends Controller {
                             Web::root."shop/cart" => "購物車"];
         $data["navListRHS"] = [ Web::root."shop/login" => "登入",
                             Web::root."shop/signup" => "註冊"];
+        $data["script"] = [ Web::root."views/script/shop/cart.js"];
+
         if( $_SESSION["user"] != "guest" ) {
             $data["navListLHS"][Web::root."shop/user"] = "會員中心";
             $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
         }
+
+        $product = $this->model("Product");
+
+        $data["cart"] = [];
+        ksort( $_SESSION["cart"]);
+        foreach( $_SESSION["cart"] as $productId => $value ) {
+            $product->load(["productId", "name", "price" ], (int)$productId );
+            $row = [ "productId" => $product->productId,
+                    "name" => $product->name,
+                    "price" => $product->price ];
+            $data["cart"][] = $row;
+        }
+
         $this->view( "shop/cart", $data );
+    }
+
+    public function confirm() {
+        if( $_SESSION["user"] == "guest" ) {
+            $_SESSION["lastPage"] = "shop/cart";
+            header("Location: ".Web::root."shop/login");
+            exit;
+        }
+
+        if( count($_SESSION["cart"]) == 0 ) {
+            header("Location: ".Web::root."shop/cart");
+            exit;
+        }
+
+        $data["title"] = "購物車";
+        $data["pageName"] = "購物車";
+        $data["navBrand"] = ["link" => Web::root."shop/home",
+                            "value" => "GoodBuy"];
+        $data["navListLHS"] = [ Web::root."shop/home" => "首頁",
+                            Web::root."shop/cart" => "購物車"];
+        $data["navListRHS"] = [ Web::root."shop/login" => "登入",
+                            Web::root."shop/signup" => "註冊"];
+        $data["script"] = [ Web::root."views/script/shop/cart.js"];
+        if( $_SESSION["user"] != "guest" ) {
+            $data["navListLHS"][Web::root."shop/user"] = "會員中心";
+            $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
+        }
+
+        switch( $_SERVER["REQUEST_METHOD"] ) {
+            case "GET":
+                $product = $this->model("Product");
+                $data["cart"] = [];
+                $data["total"] = 0;
+                ksort( $_SESSION["cart"]);
+                foreach( $_SESSION["cart"] as $productId => $value ) {
+                    $product->load(["productId", "name", "price" ], (int)$productId );
+                    $row = [ "productId" => $product->productId,
+                            "name" => $product->name,
+                            "price" => $product->price ];
+                    $data["cart"][] = $row;
+                    $data["total"] += $product->price * $value;
+                }
+
+                $this->view( "shop/confirm", $data );
+                break;
+            case "POST":
+                
+                $currentTime = date("Y-m-d H:i:s", mktime(gmdate("H")+8, gmdate("i"), gmdate("s"), gmdate("m"), gmdate("d"), gmdate("Y")) );
+                $order = $this->model("Order");
+                $order->create([
+                    "userId" => $_SESSION["userId"],
+                    "date" => $currentTime
+                ]);
+                $order->loadLastByUserId(["orderId", "userId", "date"], $_SESSION["userId"]);
+
+                $orderDetail = $this->model("OrderDetail");
+                foreach( $_SESSION["cart"] as $productId => $value ) {
+                    $orderDetail->create([
+                        "orderId" =>  $order->orderId,
+                        "productId" => (int)$productId,
+                        "value" => $value
+                    ]);
+                }
+                $data["orderId"] = $order->orderId;
+                $_SESSION["cart"] = [];
+                $this->view( "shop/success", $data );
+                break;
+        }
+
     }
 
     public function intro() {
@@ -48,6 +143,7 @@ class ShopController extends Controller {
                             Web::root."shop/cart" => "購物車"];
         $data["navListRHS"] = [ Web::root."shop/login" => "登入",
                             Web::root."shop/signup" => "註冊"];
+        $data["script"] = [ Web::root."views/script/shop/intro.js"];
         $data["lastPage"] = $_SESSION["lastPage"];
 
         $product = $this->model("Product");
@@ -59,6 +155,25 @@ class ShopController extends Controller {
             $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
         }
         $this->view( "shop/intro", $data );
+    }
+
+    public function user() {
+        if( $_SESSION["user"] == "guest" ) {
+            header("Location: ".Web::root."shop/home");
+        }
+
+        $data["title"] = "商品介紹";
+        $data["pageName"] = "會員中心";
+        $data["navBrand"] = ["link" => Web::root."shop/home",
+                            "value" => "GoodBuy"];
+        $data["navListLHS"] = [ Web::root."shop/home" => "首頁",
+                            Web::root."shop/cart" => "購物車",
+                            Web::root."shop/user" => "會員中心" ];
+
+        $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
+            
+        
+        $this->view( "shop/user", $data );
     }
 
     public function login() {
@@ -87,7 +202,7 @@ class ShopController extends Controller {
                     if( $user->password == hash("sha256", $requestData["password"])) {
                         $_SESSION["user"] = "user";
                         $_SESSION["userId"] = $requestData["userId"];
-                        header("Location: ".Web::root."shop/home");
+                        header("Location: ".Web::root.$_SESSION["lastPage"] );
                         exit;
                     } else {
                         $data["userId"] = $requestData["userId"];

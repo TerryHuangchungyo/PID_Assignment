@@ -1,9 +1,9 @@
 <section class="container vw-100">
     <div class="container row mt-4">
         <h4>
-            購物車
+            訂單確認
         </h4>
-        <a href="<?=Web::root."shop/cart/clear"?>" class="ml-auto btn btn-light mb-3">清空購物車</a>
+        <a href="<?=Web::root.$_SESSION["lastPage"]?>" class="ml-auto btn btn-light mb-3">返回</a>
     </div>
     <table id="cartTable" class="table">
         <thead>
@@ -12,7 +12,7 @@
                 <th scope="col">商品名稱</th>
                 <th scope="col">價格</th>
                 <th scope="col">數量</th>
-                <th scope="col"></th>
+                <th scope="col">金額</th>
             </tr>
         </thead>
         <tbody>
@@ -21,21 +21,30 @@
                 <th scope="row"><?=$item["productId"]?></th>
                 <td><a href="<?=Web::root?>shop/intro/<?=$item["productId"]?>" class="text-dark"><?=htmlspecialchars($item["name"])?></a></td>
                 <td>NT $<?=$item["price"]?></td>
-                <td><input type="number" value="<?=$_SESSION["cart"][$item["productId"]]?>" min="1" step="1"></td>
-                <td><a class="cancel text-danger">取消</a></td>
+                <td><?=$_SESSION["cart"][$item["productId"]]?></td>
+                <td>$ <?=$item["price"] * $_SESSION["cart"][$item["productId"]]?></td>
             </tr>
             <?php endforeach; ?>
         </tbody>
         <tfoot>
             <tr>
-                <th scope="col">共計<?=count($_SESSION["cart"])?>項</th>
+                <th scope="col">合計</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col">
-                    <?php if( count($_SESSION["cart"]) > 0 ):?>
-                        <a href="<?=Web::root?>shop/confirm" class="text-success">下訂單</a>
-                    <?php endif?>
+                    $ <?=$data["total"]?>
+                </th>
+            </tr>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col">
+                    <form method="post" action="#">
+                        <button class="btn btn-success">提交</button>
+                    </form>
                 </th>
             </tr>
         </tfoot>

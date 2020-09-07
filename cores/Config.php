@@ -2,12 +2,14 @@
 class DB
 {
     const dbuser = "root";
-    const dbpass = "";
+    const dbpass = "root";
     const dbhost = "localhost";
-    const dbport = "3306";
+    const dbport = "8809";
     const dbname = "PID";
     const userTbName = "Users";
     const productTbName = "Products";
+    const orderTbName = "Orders";
+    const orderDetailTbName = "OrderDetails";
 }
 
 class Web
