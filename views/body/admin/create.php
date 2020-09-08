@@ -1,8 +1,10 @@
 <div class="row my-3">
     <div class="offset-1 col-7">
-        <h5 class="ml-3">
+        <h5>
             <?=$data["action"]?>商品
-        </h5><hr>
+            <a id="back" class="float-right btn btn-light">返回</a>
+        </h5>
+        <hr>
         <div class="ml-3">
             <form id="createForm" action="<?=Web::root."admin/".$data["method"].(isset($data["productId"])? "/".$data["productId"]:"")?>" method="post">
                 <div class="form-group">

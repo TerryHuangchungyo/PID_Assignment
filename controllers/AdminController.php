@@ -2,7 +2,7 @@
 class AdminController extends Controller {
     public function intro() {
         $productId = func_get_arg(1);
-
+        
         if( $_SESSION["user"] != "admin") {
             header( "Location: ".Web::root."shop/home");
             exit;
@@ -16,6 +16,7 @@ class AdminController extends Controller {
                             Web::root."admin/order" => "訂單管理",
                             Web::root."admin/user" => "會員管理"];
         $data["navListRHS"] = [ Web::root."admin/logout" => "登出"];
+        $data["script"] = [ Web::root."views/script/admin/intro.js"];
 
         $product = $this->model("Product");
         $product->load( ["productId","name","productDesc","image","price","createDate"], $productId );
@@ -250,7 +251,6 @@ class AdminController extends Controller {
 
 
         $userId = (func_num_args() == 2) ?  func_get_arg(1) : null;
-        
 
         $data["orders"] = $this->model("Orders")->getOrdersByUserId(["orderId","date"], $userId ,null, null );
         $this->view( "admin/order", $data );
@@ -270,14 +270,18 @@ class AdminController extends Controller {
                             Web::root."admin/order" => "訂單管理",
                             Web::root."admin/user" => "會員管理"];
         $data["navListRHS"] = [ Web::root."admin/logout" => "登出"];
+        $data["script"] = [ Web::root."views/script/admin/orderDetail.js"];
         $orderId = func_get_arg( 1 );
+
         $order = $this->model("Order");
+
         $order->load([ "orderId", "userId", "date" ], $orderId );
         $data["orderDetail"] = $this->model("OrderDetails")->getOrderDetailsByOrderId($order->orderId);
         $data["total"] = 0;
         foreach( $data["orderDetail"] as $item ) {
             $data["total"] += $item["price"] * $item["value"];
         }
+
         $this->view("admin/orderDetail", $data);
     }
 

@@ -28,13 +28,13 @@
         </tbody>
         <tfoot>
             <tr>
-                <th scope="col">共計<?=count($_SESSION["cart"])?>項</th>
+                <th scope="col">共計<span id="cartCount"><?=count($_SESSION["cart"])?></span>項</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col">
                     <?php if( count($_SESSION["cart"]) > 0 ):?>
-                        <a href="<?=Web::root?>shop/confirm" class="text-success">下訂單</a>
+                        <a id="confirmBtn" href="<?=Web::root?>shop/confirm" class="text-success">下訂單</a>
                     <?php endif?>
                 </th>
             </tr>

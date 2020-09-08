@@ -3,7 +3,7 @@
         <h4>
             訂單確認
         </h4>
-        <a href="<?=Web::root.$_SESSION["lastPage"]?>" class="ml-auto btn btn-light mb-3">返回</a>
+        <a id="back" class="ml-auto btn btn-light mb-3">返回</a>
     </div>
     <table id="cartTable" class="table">
         <thead>

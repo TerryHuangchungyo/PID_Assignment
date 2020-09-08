@@ -2,6 +2,10 @@ $(document).ready(function(){
     $("#progress").hide();
     $("#status").hide();
 
+    $("#back").click(function(){
+        history.back();
+    })
+    
     $("#uploadBtn").click(function(event) {
         var file = $("#productImage")[0].files[0];
         var formData = new FormData();

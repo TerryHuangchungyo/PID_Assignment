@@ -1,4 +1,10 @@
 $(document).ready(function(){
+
+    $("#back").click(function(){
+        history.back();
+    })
+
+
     $("a.cart").click(function(){
         let dataToServer = {
             productId: $(this).data("productid"),

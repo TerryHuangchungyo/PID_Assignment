@@ -20,7 +20,7 @@
                 <a data-productId="<?=$data["product"]->productId?>" class="cart mr-3 btn btn-primary <?=isset($_SESSION["cart"][$data["product"]->productId])?"disabled":""?>"><?=isset($_SESSION["cart"][$data["product"]->productId])?"已加入":"加入購物車"?></a>
                 <a class="btn btn-danger">直接購買</a>
             </div>
-            <a href="<?=Web::root.$data["lastPage"]?>" class="float-right btn btn-white mt-4">返回</a>
+            <a id="back" class="float-right btn btn-white mt-4">返回</a>
         </div>
     </div>
     </div>

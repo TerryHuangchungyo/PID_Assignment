@@ -18,7 +18,7 @@ class App {
         if( !isset($_SESSION["cart"]) ) {
             $_SESSION["cart"] = [];
         }
-        
+
         $router = new Router( $_GET["url"] );
 
         $router->put( "/^\/?cart\/?$/", function ( $match, $requestData ) {
@@ -30,7 +30,8 @@ class App {
         $router->delete( "/^\/?cart\/(?P<productId>\w+)/", function( $match, $requestData ) {
             $productId = $match["productId"];
             unset( $_SESSION["cart"][$productId] );
-            echo "delete success";
+            $result = [ "count" => count( $_SESSION["cart"]) ];
+            echo json_encode($result);
         } );
 
         $router->add( "/\/?(?P<controller>\w+)(\/(?P<method>\w+))?(\/(?P<param>.+))?/", function( $match, $requestData ){

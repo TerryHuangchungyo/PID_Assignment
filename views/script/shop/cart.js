@@ -6,7 +6,10 @@ $(document).ready(function(){
             type: "delete",
             url: "/PID_Assignment/cart/" + $row.find("th").text()
         }).done(function( response ){
-            console.log(response)
+            data = JSON.parse(response);
+            $("#cartCount").text( data["count"]);
+            if( data["count"] == 0 ) 
+                $("#confirmBtn").hide();
             $row.remove();
         });
     });

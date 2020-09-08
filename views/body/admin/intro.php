@@ -16,7 +16,7 @@
                 <h5 class="card-title">NT $ <?=$data["product"]->price?></h5>
                 <p class="card-text"><?=$data["product"]->productDesc?></p>
                 <p class="card-text">上架時間: <?=$data["product"]->createDate?></p>
-                <a href="<?=Web::root.$data["lastPage"]?>" class="float-right btn btn-white">返回</a>
+                <a id="back" class="float-right btn btn-white">返回</a>
             </div>
         </div>
     </div>
