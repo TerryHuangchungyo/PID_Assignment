@@ -22,7 +22,7 @@
                     <td><a class="text-dark" href="<?=Web::root."admin/intro/".$product["productId"]?>"><?=$product["name"]?></a></td>
                     <td>NT $ <?=$product["price"]?></td>
                     <td><?=$product["createDate"]?></td>
-                    <td scope="col"><a class="text-success">修改</a>|<?= $product["active"] == 0? "<a href='".Web::root."admin/shelf/".$product["productId"]."' class='text-warning'>上架</a>":"<a href='".Web::root."admin/unshelf/".$product["productId"]."' class='text-danger'>下架</a>" ?></td>
+                    <td scope="col"><a href="<?=Web::root."admin/modify/".$product["productId"]?>" class="text-success">修改</a>|<?= $product["active"] == 0? "<a href='".Web::root."admin/shelf/".$product["productId"]."' class='text-warning'>上架</a>":"<a href='".Web::root."admin/unshelf/".$product["productId"]."' class='text-danger'>下架</a>" ?></td>
                 </tr>
             <?php endforeach;?>
         </tbody>

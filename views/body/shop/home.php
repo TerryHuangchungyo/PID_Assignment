@@ -11,7 +11,7 @@
     <div id="productList" class="container row d-flex justify-content-around mx-auto my-3">
         <?php foreach( $data["products"] as $row):?>
         <div class="card my-2" style="width: 250px;">
-            <img src="<?=Web::root?>productImg/<?=$row["image"]?>" class="card-img-top" alt="商品圖片">
+            <img src="<?=Web::root?>productImg/<?=$row["image"]?>" class="card-img-top" style="width: 250px; height: 200px" alt="商品圖片">
             <div class="card-body">
                 <h5 class="card-title"><a href="<?=Web::root?>shop/intro/<?=$row["productId"]?>" class="text-dark"><?=htmlspecialchars($row["name"])?></a></h5>
                 <h5 class="card-text">NT $<?=$row["price"]?></h5>

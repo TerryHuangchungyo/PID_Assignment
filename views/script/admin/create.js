@@ -3,41 +3,45 @@ $(document).ready(function(){
     $("#status").hide();
 
     $("#uploadBtn").click(function(event) {
-        event.preventDefault();
-        var file = $("input[name='productImage']")[0].files[0];
+        var file = $("#productImage")[0].files[0];
         var formData = new FormData();
         formData.append("productImage", file);
     
         $.ajax({
-            url: '/PID_Assignment/admin/upload',
-            method: 'POST',
+            url: '/PID_Assignment/admin/uploadImg',
             type: 'POST',
             data: formData,
+            cache: false,
             contentType: false,
             processData: false,
-            sucess: function(){
-
+            success: function( response ){
+                console.log(response);
+                if( response["success"] ) {
+                    $("#status").text(response["msg"]);
+                    $("#status").show();
+                    $("#imageURI").val(response["fileURI"]);
+                    $("#demoImg").prop("src","/PID_Assignment/uploadImg/"+response["fileURI"]);
+                } else {
+                    $("#status").text(response["msg"]);
+                    $("#status").show();
+                }
             },
-            
-            beforesend: function(){
-                $("#progress").show();
-                $("#status").show();
-            },
-            complete: function(){
-                $("#progress").hide();
-            },
-            xhr: function () {
-                var xhr = new window.XMLHttpRequest();
-                xhr.upload.addEventListener("progress",uploadProgressHandler,false);
-                xhr.addEventListener("load", loadHandler, false);
-                xhr.addEventListener("error", errorHandler, false);
-                xhr.addEventListener("abort", abortHandler, false);
-    
-                return xhr;
+            error: function( response ) {
+                alert("系統發生問題");
             }
         });
     });
 })
+
+// xhr: function () {
+//     var xhr = new window.XMLHttpRequest();
+//     xhr.upload.addEventListener("progress",uploadProgressHandler,false);
+//     xhr.addEventListener("load", loadHandler, false);
+//     xhr.addEventListener("error", errorHandler, false);
+//     xhr.addEventListener("abort", abortHandler, false);
+
+//     return xhr;
+// }
 
 function uploadProgressHandler(event) {
     // $("#loaded_n_total").html("Uploaded " + event.loaded + " bytes of " + event.total);

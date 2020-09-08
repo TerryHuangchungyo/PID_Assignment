@@ -106,12 +106,131 @@ class AdminController extends Controller {
                             Web::root."admin/order" => "訂單管理",
                             Web::root."admin/user" => "會員管理"];
         $data["navListRHS"] = [ Web::root."admin/logout" => "登出"];
-        $data["script"] = [ Web::root."views/script/admin/create.js"];
-        $this->view( "admin/create", $data );
+        switch( $_SERVER["REQUEST_METHOD"] ) {
+            case "GET":
+                $data["action"] = "新增";
+                $data["method"] = "create";
+                $data["script"] = [ Web::root."views/script/admin/create.js"];
+                $this->view( "admin/create", $data );
+                break;
+            case "POST":
+                $product = $this->model("Product");
+                $lastId = $product->getLastId() + 1;
+                $currentTime = date("Y-m-d", mktime(gmdate("H")+8, gmdate("i"), gmdate("s"), gmdate("m"), gmdate("d"), gmdate("Y")) );
+               
+
+                if( $_POST["imageURI"] != "" ) {
+                    $imageURI = $lastId.$_POST["imageURI"];
+                    rename( "/Applications/MAMP/htdocs".Web::root."uploadImg/".$_POST["imageURI"],"/Applications/MAMP/htdocs".Web::root."productImg/".$imageURI);
+                } else {
+                    $imageURI = "noimage.png";
+                }
+                
+
+                $product->create([
+                    "name" => $_POST["productName"],
+                    "productDesc" => $_POST["productDesc"],
+                    "image" => $imageURI,
+                    "price" => (int)$_POST["productPrice"],
+                    "createDate"=> $currentTime
+                ]);
+                header("Location: ".Web::root."admin/product");
+                break;
+        }
+    }
+
+    public function modify() {
+        if( $_SESSION["user"] != "admin") {
+            header( "Location: ".Web::root."shop/home");
+            exit;
+        }
+
+        $data["title"] = "商品管理";
+        $data["pageName"] = "商品管理";
+        $data["navBrand"] = ["link" => Web::root."admin/login",
+                            "value" => "GoodBuy Administrator"];
+        $data["navListLHS"] = [ Web::root."admin/product" => "商品管理",
+                            Web::root."admin/order" => "訂單管理",
+                            Web::root."admin/user" => "會員管理"];
+        $data["navListRHS"] = [ Web::root."admin/logout" => "登出"];
+
+        $productId = func_get_arg(1);
+        $product = $this->model("Product");
+        $product->load(["name", "productDesc", "image", "price", "createDate"], $productId );
+
+        switch( $_SERVER["REQUEST_METHOD"] ) {
+            case "GET":
+                $data["action"] = "修改";
+                $data["method"] = "modify";
+                $data["script"] = [ Web::root."views/script/admin/create.js"];
+                $data["productId"] = $productId;
+                $data["productName"] = $product->name;
+                $data["productPrice"] = $product->price;
+                $data["productDesc"] = $product->productDesc;
+                $data["productImage"] = $product->image;
+                $this->view( "admin/create", $data );
+                break;
+            case "POST":
+                $currentTime = date("Y-m-d", mktime(gmdate("H")+8, gmdate("i"), gmdate("s"), gmdate("m"), gmdate("d"), gmdate("Y")) );
+                $product->name = $_POST["productName"];
+                $product->productDesc = $_POST["productDesc"];
+                $product->price = (int)$_POST["productPrice"];
+                $product->createDate = $currentTime;
+
+                if( $_POST["imageURI"] != "" ) {
+                    $imageURI = $productId.$_POST["imageURI"];
+                    rename( "/Applications/MAMP/htdocs".Web::root."uploadImg/".$_POST["imageURI"],"/Applications/MAMP/htdocs".Web::root."productImg/".$imageURI );
+                    $product->image = $imageURI;
+                }
+
+                $product->save(["name", "productDesc", "image", "price", "createDate"]);
+                header("Location: ".Web::root."admin/product");
+                break;
+        }
     }
 
     public function uploadImg() {
+        if( $_SESSION["user"] != "admin") {
+            header( "Location: ".Web::root."shop/home");
+            exit;
+        }
 
+        $result = [];
+        
+        if( isset( $_FILES["productImage"]) ) {
+            $files = glob('/Applications/MAMP/htdocs/PID_Assignment/uploadImg/*'); // get all file names
+            foreach($files as $file){ // iterate files
+                if(is_file($file))
+                    unlink($file); // delete file
+            }
+
+            $fileParse = explode(".",$_FILES["productImage"]["name"]);
+            $extendsion = end($fileParse);
+            $randstr = date("YmdHis", mktime(gmdate("H")+8, gmdate("i"), gmdate("s"), gmdate("m"), gmdate("d"), gmdate("Y")));
+
+            $fileURI = $randstr.".".$extendsion;
+            if( $_FILES["productImage"]["error"] == 0 ) {
+            if( move_uploaded_file( $_FILES["productImage"]["tmp_name"], "/Applications/MAMP/htdocs/PID_Assignment/uploadImg/".$fileURI )) {
+                $result = [
+                    "success" => true,
+                    "msg" => "上傳成功",
+                    "fileURI" => $fileURI
+                ];
+            } else {
+                $result = [
+                    "success" => false,
+                    "msg" => "上傳失敗"
+                ];
+            }
+        }
+        } else {
+            $result = [
+                "success" => false,
+                "msg" => "請選擇檔案"
+            ];
+        }
+
+        $this->view("api/JsonAPI", $result);
     }
 
     public function order() {
