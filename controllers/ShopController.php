@@ -179,7 +179,7 @@ class ShopController extends Controller {
                             Web::root."shop/cart" => "購物車"];
         $data["navListRHS"] = [ Web::root."shop/login" => "登入",
                             Web::root."shop/signup" => "註冊"];
-        $data["script"] = [ Web::root."views/script/shop/confirm.js"];
+        $data["script"] = [ Web::root."views/script/shop/back.js"];
         if( $_SESSION["user"] != "guest" ) {
             $data["navListLHS"][Web::root."shop/user"] = "會員中心";
             $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
@@ -238,7 +238,8 @@ class ShopController extends Controller {
                             Web::root."shop/cart" => "購物車"];
         $data["navListRHS"] = [ Web::root."shop/login" => "登入",
                             Web::root."shop/signup" => "註冊"];
-        $data["script"] = [ Web::root."views/script/shop/intro.js"];
+        $data["script"] = [ Web::root."views/script/shop/intro.js",
+                            Web::root."views/script/shop/back.js"];
 
         $product = $this->model("Product");
         $product->load( ["productId","name","productDesc","image","price","createDate"], $productId );
@@ -256,7 +257,8 @@ class ShopController extends Controller {
             header("Location: ".Web::root."shop/home");
         }
 
-        $data["title"] = "商品介紹";
+        $data["css"] = [Web::root."views/css/customNavPill.css"];
+        $data["title"] = "會員中心";
         $data["pageName"] = "會員中心";
         $data["navBrand"] = ["link" => Web::root."shop/home",
                             "value" => "GoodBuy"];
@@ -265,6 +267,7 @@ class ShopController extends Controller {
                             Web::root."shop/user" => "會員中心" ];
 
         $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
+        $data["script"] = [ Web::root."views/script/shop/user.js" ];
         $data["orders"] = $this->model("Orders")->getOrdersByUserId(["orderId","date"], $_SESSION["userId"],null, null );
         
         $this->view( "shop/user", $data );
@@ -401,7 +404,7 @@ class ShopController extends Controller {
         $data["navListLHS"] = [ Web::root."shop/home" => "首頁",
                             Web::root."shop/cart" => "購物車",
                             Web::root."shop/user" => "會員中心" ];
-        $data["script"] = [ Web::root."views/script/shop/order.js"];
+        $data["script"] = [ Web::root."views/script/shop/back.js"];
         $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
         $data["orderDetail"] = $this->model("OrderDetails")->getOrderDetailsByOrderId($order->orderId);
         $data["total"] = 0;
@@ -411,6 +414,50 @@ class ShopController extends Controller {
         $this->view("shop/orderDetail", $data);
     }
 
+    public function changePassword() {
+        $result = [];
+
+        if( $_POST["changedPassword"] == "" ) {
+            $result["changedPassword"] = "此欄位不能留空";  
+        } else {
+            if( $_POST["changedPassword"] != $_POST["changedPasswordCheck"] ) {
+                $result["changedPasswordCheck"] = "此欄位必須與上欄輸入的密碼相同"; 
+            }
+        }
+
+        if( $_POST["changedPasswordCheck"] == "" ) {
+            $result["changedPasswordCheck"] = "此欄位不能留空";
+        }
+
+        if( $_POST["password"] == "" ) {
+            $result["password"] = "此欄位不能留空";  
+        } else {
+            if( $_POST["password"] != $_POST["passwordCheck"] ) {
+                $result["passwordCheck"] = "此欄位必須與上欄輸入的密碼相同"; 
+            }
+        }
+
+        if( $_POST["passwordCheck"] == "" ) 
+            $result["passwordCheck"] = "此欄位不能留空";
+        
+        if( count($result) == 0 ) {
+            $user = $this->model("User");
+            $user->load(["password"], $_SESSION["userId"] );
+            if( hash( "sha256", $_POST["password"]) == $user->password )  {
+                $user->password = hash( "sha256", $_POST["changedPassword"]);
+                $user->save(["password"],  $_SESSION["userId"]);
+                $result["success"] = true;
+            } else {
+                $result["password"] = "密碼錯誤"; 
+                $result["success"] = false;
+            }
+        } else {
+            $result["success"] = false;
+        }
+
+        $this->view("api/JsonAPI", $result);
+    }
+    
     public function default() {
         header( "Location: ".Web::root."shop/home" );
     }
