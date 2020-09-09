@@ -8,7 +8,7 @@
     <div class="row no-gutters">
         <div class="col-3">
             <div style="overflow: hidden; width:250px; height: 200px;">
-                <img src="<?=Web::root."productImg/".($data["product"]->image)?>" style="width:250px; height: 200px;" alt="...">
+                <img src="<?=Web::root.Web::imageDir.($data["product"]->image)?>" style="width:250px; height: 200px;" alt="...">
             </div>
         </div>
         <div class="col-9">
@@ -18,7 +18,7 @@
             <p class="card-text">上架時間: <?=$data["product"]->createDate?></p>
             <div class="d-flex justify-content-end">
                 <a data-productId="<?=$data["product"]->productId?>" class="cart mr-3 btn btn-primary <?=isset($_SESSION["cart"][$data["product"]->productId])?"disabled":""?>"><?=isset($_SESSION["cart"][$data["product"]->productId])?"已加入":"加入購物車"?></a>
-                <a class="btn btn-danger">直接購買</a>
+                <a href="<?=Web::root."shop/buy/".$data["product"]->productId?>" class="btn btn-danger">直接購買</a>
             </div>
             <a id="back" class="float-right btn btn-white mt-4">返回</a>
         </div>

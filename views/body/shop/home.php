@@ -17,7 +17,7 @@
                 <h5 class="card-text">NT $<?=$row["price"]?></h5>
                 <div class="d-flex justify-content-around">
                     <a data-productId="<?=$row["productId"]?>" class="cart btn btn-primary <?=isset($_SESSION["cart"][$row["productId"]])?"disabled":""?>"><?=isset($_SESSION["cart"][$row["productId"]])?"已加入":"加入購物車"?></a>
-                    <a class="btn btn-danger">直接購買</a>
+                    <a href="<?=Web::root?>shop/buy/<?=$row["productId"]?>" class="btn btn-danger">直接購買</a>
                 </div>   
             </div>
         </div>

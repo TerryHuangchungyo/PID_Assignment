@@ -16,7 +16,7 @@ class AdminController extends Controller {
                             Web::root."admin/order" => "訂單管理",
                             Web::root."admin/user" => "會員管理"];
         $data["navListRHS"] = [ Web::root."admin/logout" => "登出"];
-        $data["script"] = [ Web::root."views/script/admin/intro.js"];
+        $data["script"] = [ Web::root."views/script/admin/back.js"];
 
         $product = $this->model("Product");
         $product->load( ["productId","name","productDesc","image","price","createDate"], $productId );
@@ -111,7 +111,9 @@ class AdminController extends Controller {
             case "GET":
                 $data["action"] = "新增";
                 $data["method"] = "create";
-                $data["script"] = [ Web::root."views/script/admin/create.js"];
+                $data["script"] = [ 
+                                    Web::root."views/script/admin/back.js",
+                                    Web::root."views/script/admin/create.js"];
                 $this->view( "admin/create", $data );
                 break;
             case "POST":
@@ -163,7 +165,8 @@ class AdminController extends Controller {
             case "GET":
                 $data["action"] = "修改";
                 $data["method"] = "modify";
-                $data["script"] = [ Web::root."views/script/admin/create.js"];
+                $data["script"] = [ Web::root."views/script/admin/create.js",
+                                    Web::root."views/script/admin/back.js"];
                 $data["productId"] = $productId;
                 $data["productName"] = $product->name;
                 $data["productPrice"] = $product->price;
@@ -249,7 +252,7 @@ class AdminController extends Controller {
                             Web::root."admin/order" => "訂單管理",
                             Web::root."admin/user" => "會員管理"];
         $data["navListRHS"] = [ Web::root."admin/logout" => "登出"];
-
+        $data["script"] = [ Web::root."views/script/admin/back.js"];
 
         $userId = (func_num_args() == 2) ?  func_get_arg(1) : null;
 
@@ -271,7 +274,7 @@ class AdminController extends Controller {
                             Web::root."admin/order" => "訂單管理",
                             Web::root."admin/user" => "會員管理"];
         $data["navListRHS"] = [ Web::root."admin/logout" => "登出"];
-        $data["script"] = [ Web::root."views/script/admin/orderDetail.js"];
+        $data["script"] = [ Web::root."views/script/admin/back.js"];
         $orderId = func_get_arg( 1 );
 
         $order = $this->model("Order");

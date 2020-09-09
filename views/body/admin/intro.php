@@ -8,7 +8,7 @@
         <div class="row no-gutters">
             <div class="col-3">
                 <div style="overflow: hidden; width:250px; height: 200px;">
-                    <img src="<?=Web::root."productImg/".$data["product"]->image?>" style="width:250px; height: 200px;" class="mx-auto my-auto" alt="...">
+                    <img src="<?=Web::root.Web::imageDir.$data["product"]->image?>" style="width:250px; height: 200px;" class="mx-auto my-auto" alt="...">
                 </div>
             </div>
             <div class="col-9">

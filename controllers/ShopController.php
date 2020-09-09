@@ -60,6 +60,105 @@ class ShopController extends Controller {
         $this->view( "shop/cart", $data );
     }
 
+    public function buy() {
+        if( func_num_args() == 2 ) {
+            $productId = func_get_arg(1);
+        } else {
+            header("Location: ".Web::root."shop/home");
+            exit;
+        }
+
+        if( $_SESSION["user"] == "guest" ) {
+            $_SESSION["lastPage"] = "shop/buy/".$productId;
+            header("Location: ".Web::root."shop/login");
+            exit;
+        }
+
+        $data["title"] = "購買";
+        $data["pageName"] = "購物車";
+        $data["navBrand"] = ["link" => Web::root."shop/home",
+                            "value" => "GoodBuy"];
+        $data["navListLHS"] = [ Web::root."shop/home" => "首頁",
+                            Web::root."shop/cart" => "購物車"];
+        $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
+
+        switch( $_SERVER["REQUEST_METHOD"] ) {
+            case "GET":
+                $product = $this->model("Product");
+                $product->load(["productId","name","price"], $productId);
+                $data["product"] = [ "productId" => $product->productId,
+                                    "name" => $product->name,
+                                    "price" => $product->price ];
+                $data["script"] = [ Web::root."views/script/shop/buy.js",
+                                    Web::root."views/script/shop/back.js" ];
+                $data["confirm"] = false;
+                
+                $this->view( "shop/buy", $data );
+                break;
+            case "POST":
+                
+                $product = $this->model("Product");
+                $product->load(["productId","name","price"], $productId);
+                $data["product"] = [ "productId" => $product->productId,
+                                    "name" => $product->name,
+                                    "price" => $product->price,
+                                    "value" => (int)$_POST["value"],
+                                    "total" => (int)$_POST["value"] * $product->price ];
+                $data["script"] = [ Web::root."views/script/shop/back.js" ];
+                $data["confirm"] = true;
+                
+                $this->view( "shop/buy", $data );
+                break;
+        }
+    }
+
+    public function commit() {
+        if( $_SESSION["user"] == "guest" ) {
+            $_SESSION["lastPage"] = "shop/home";
+            header("Location: ".Web::root."shop/login");
+            exit;
+        }
+
+        if( !isset($_POST["productId"]) || !isset($_POST["value"]) ){
+            header("Location: ".Web::root."shop/home");
+            exit;
+        }
+
+
+        $data["title"] = "購物車";
+        $data["pageName"] = "購物車";
+        $data["navBrand"] = ["link" => Web::root."shop/home",
+                            "value" => "GoodBuy"];
+        $data["navListLHS"] = [ Web::root."shop/home" => "首頁",
+                            Web::root."shop/cart" => "購物車",
+                            Web::root."shop/user" => "會員中心"];
+        $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
+        $data["script"] = [ Web::root."views/script/shop/confirm.js"];
+        
+
+        switch( $_SERVER["REQUEST_METHOD"] ) {
+            case "POST":
+                $currentTime = date("Y-m-d H:i:s", mktime(gmdate("H")+8, gmdate("i"), gmdate("s"), gmdate("m"), gmdate("d"), gmdate("Y")) );
+                $order = $this->model("Order");
+                $order->create([
+                    "userId" => $_SESSION["userId"],
+                    "date" => $currentTime
+                ]);
+                $order->loadLastByUserId(["orderId", "userId", "date"], $_SESSION["userId"]);
+
+                $orderDetail = $this->model("OrderDetail");
+                $orderDetail->create([
+                    "orderId" =>  $order->orderId,
+                    "productId" => (int)$_POST["productId"],
+                    "value" => (int)$_POST["value"]
+                ]);
+                $data["orderId"] = $order->orderId;
+                $_SESSION["cart"] = [];
+                $this->view( "shop/success", $data );
+                break;
+        }  
+    }
+
     public function confirm() {
         if( $_SESSION["user"] == "guest" ) {
             $_SESSION["lastPage"] = "shop/cart";

@@ -3,6 +3,7 @@
         <h4>
             訂單管理
         </h4>
+        <a id="back" class="ml-auto btn btn-light">返回</a>
     </div>
     <div class="container">
         <table id="cartTable" class="table table-hover">
@@ -34,3 +35,8 @@
         </table>
     </div>
 </section>
+<?php if(isset($data["script"])):?>
+    <?php foreach( $data["script"] as $script ):?>
+        <script src="<?=$script?>"></script>
+    <?php endforeach; ?>
+<?php endif;?>
