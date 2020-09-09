@@ -1,7 +1,12 @@
 # PID_Assignment: 購物車
+首頁
+![網站首頁](demo/shop.png)
+
+管理端畫面
+![網站首頁](demo/admin.png)
 ## 使用説明
 1. 將此資料夾放到網站伺服器根目錄底下
-2. 根據資料庫設定修改"cores/config.php"的內容dbuser 帳號, dbpass 密碼, dbhost 域名, dbport port
+2. 根據資料庫設定修改"cores/config.php"的內容dbuser 帳號, dbpass 密碼, dbhost 域名, dbport port, Web root, Web fileRoot, Web uploadDir, Web imageDir
 3. 將dbscript/script.txt的SQL語句拿到SQL commndline或phpmyadmin執行
 4. 下載composer，輸入指令: composer dump-autoload 
 5. 打開瀏覽器並輸入localhost/PID_Assignment
