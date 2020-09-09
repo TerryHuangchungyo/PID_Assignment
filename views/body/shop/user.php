@@ -43,6 +43,35 @@
             <div class="tab-pane fade" id="v-pills-setting" role="tabpanel">
                 <div class="container">
                     <h5>帳戶設定</h5><hr>
+                    <div class="row my-2">
+                        <div class="text-right col-2 pt-2">帳戶名稱:</div>
+                        <div class="col-3">
+                            <input type="text" class="form-control" id="userName">
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="text-right col-2 pt-2">生日:</div>
+                        <div class="col-3">
+                            <input type="date" class="form-control" id="userName">
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="text-right col-2 pt-2">信箱:</div>
+                        <div class="col-3">
+                            <input type="email" class="form-control" id="userName">
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="text-right col-2 pt-2">電話:</div>
+                        <div class="col-3">
+                            <input type="text" class="form-control" id="userName">
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="offset-2 col-3">
+                        <button id="settingSubmit" type="submit" class="float-right btn btn-dark">提交修改</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="tab-pane fade" id="v-pills-changePassword" role="tabpanel" >
