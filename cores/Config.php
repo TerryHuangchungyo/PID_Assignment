@@ -15,4 +15,7 @@ class DB
 class Web
 {
     const root = "/PID_Assignment/";
+    const fileRoot = "/Applications/MAMP/htdocs";
+    const uploadDir = "uploadImg/";
+    const imageDir = "productImg/";
 }

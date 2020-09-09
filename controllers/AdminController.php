@@ -122,7 +122,7 @@ class AdminController extends Controller {
 
                 if( $_POST["imageURI"] != "" ) {
                     $imageURI = $lastId.$_POST["imageURI"];
-                    rename( "/Applications/MAMP/htdocs".Web::root."uploadImg/".$_POST["imageURI"],"/Applications/MAMP/htdocs".Web::root."productImg/".$imageURI);
+                    rename( Web::fileRoot.Web::root.Web::uploadDir.$_POST["imageURI"],Web::fileRoot.Web::root.Web::imageDir.$imageURI);
                 } else {
                     $imageURI = "noimage.png";
                 }
@@ -180,7 +180,8 @@ class AdminController extends Controller {
 
                 if( $_POST["imageURI"] != "" ) {
                     $imageURI = $productId.$_POST["imageURI"];
-                    rename( "/Applications/MAMP/htdocs".Web::root."uploadImg/".$_POST["imageURI"],"/Applications/MAMP/htdocs".Web::root."productImg/".$imageURI );
+                    rename( Web::fileRoot.Web::root.Web::uploadDir.$_POST["imageURI"],Web::fileRoot.Web::root.Web::imageDir.$imageURI );
+                    unlink( Web::fileRoot.Web::root.Web::imageDir.$product->image);
                     $product->image = $imageURI;
                 }
 
@@ -199,7 +200,7 @@ class AdminController extends Controller {
         $result = [];
         
         if( isset( $_FILES["productImage"]) ) {
-            $files = glob('/Applications/MAMP/htdocs/PID_Assignment/uploadImg/*'); // get all file names
+            $files = glob(Web::fileRoot.Web::root.Web::uploadDir."/*"); // get all file names
             foreach($files as $file){ // iterate files
                 if(is_file($file))
                     unlink($file); // delete file
@@ -211,7 +212,7 @@ class AdminController extends Controller {
 
             $fileURI = $randstr.".".$extendsion;
             if( $_FILES["productImage"]["error"] == 0 ) {
-            if( move_uploaded_file( $_FILES["productImage"]["tmp_name"], "/Applications/MAMP/htdocs/PID_Assignment/uploadImg/".$fileURI )) {
+            if( move_uploaded_file( $_FILES["productImage"]["tmp_name"], Web::fileRoot.Web::root.Web::uploadDir.$fileURI )) {
                 $result = [
                     "success" => true,
                     "msg" => "上傳成功",
