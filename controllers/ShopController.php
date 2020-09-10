@@ -1,6 +1,10 @@
 <?php
 class ShopController extends Controller {
     public function home() {
+        if( $_SESSION["user"] == "guest" ) {
+            $_SESSION["lastPage"] = "shop/home";
+        }
+
         $data["title"] = "購物商城";
         $data["pageName"] = "首頁";
         $data["navBrand"] = ["link" => Web::root."shop/home",
@@ -14,12 +18,16 @@ class ShopController extends Controller {
             $data["navListLHS"][Web::root."shop/user"] = "會員中心";
             $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
         }
-
+        
         $data["products"] = $this->model("Products")->load( ["productId", "name", "productDesc", "price", "image", "active"], null, null, null, 1 );
         $this->view( "shop/home", $data );
     }
 
     public function cart() {
+        if( $_SESSION["user"] == "guest" ) {
+            $_SESSION["lastPage"] = "shop/cart";
+        }
+
         $arg_num = func_num_args();
         if( $arg_num == 2 ) {
             $option = func_get_arg(1);
@@ -268,9 +276,82 @@ class ShopController extends Controller {
 
         $data["navListRHS"] = [ Web::root."shop/logout" => "登出"];
         $data["script"] = [ Web::root."views/script/shop/user.js" ];
+
         $data["orders"] = $this->model("Orders")->getOrdersByUserId(["orderId","date"], $_SESSION["userId"],null, null );
-        
+
+        $user = $this->model("User");
+        $user->load([ "name", "birthDate", "phone", "email" ], $_SESSION["userId"]);
+        $data["user"] = $user;
         $this->view( "shop/user", $data );
+    }
+
+    public function changePassword() {
+        if( $_SESSION["user"] == "guest" ) {
+            header("Location: ".Web::root."shop/home");
+        }
+
+        $result = [];
+
+        if( $_POST["changedPassword"] == "" ) {
+            $result["changedPassword"] = "此欄位不能留空";  
+        } else {
+            if( $_POST["changedPassword"] != $_POST["changedPasswordCheck"] ) {
+                $result["changedPasswordCheck"] = "此欄位必須與上欄輸入的密碼相同"; 
+            }
+        }
+
+        if( $_POST["changedPasswordCheck"] == "" ) {
+            $result["changedPasswordCheck"] = "此欄位不能留空";
+        }
+
+        if( $_POST["password"] == "" ) {
+            $result["password"] = "此欄位不能留空";  
+        } else {
+            if( $_POST["password"] != $_POST["passwordCheck"] ) {
+                $result["passwordCheck"] = "此欄位必須與上欄輸入的密碼相同"; 
+            }
+        }
+
+        if( $_POST["passwordCheck"] == "" ) 
+            $result["passwordCheck"] = "此欄位不能留空";
+        
+        if( count($result) == 0 ) {
+            $user = $this->model("User");
+            $user->load(["password"], $_SESSION["userId"] );
+            if( hash( "sha256", $_POST["password"]) == $user->password )  {
+                $user->password = hash( "sha256", $_POST["changedPassword"]);
+                $user->save(["password"],  $_SESSION["userId"]);
+                $result["success"] = true;
+            } else {
+                $result["password"] = "密碼錯誤"; 
+                $result["success"] = false;
+            }
+        } else {
+            $result["success"] = false;
+        }
+
+        $this->view("api/JsonAPI", $result);
+    }
+
+    public function setting() {
+        if( $_SESSION["user"] == "guest" ) {
+            header("Location: ".Web::root."shop/home");
+        }
+
+        $result = [];
+        foreach( $_POST as $key => $value ) {
+            if( $value == "" ) {
+                $result[$key] = "此欄位不能留空";
+            }
+        }
+
+        if(isset( $result["email"] ) && $result["email"] != "") {
+            if( preg_match("/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/",$result["email"])) {
+                $result["email"] = "此欄位不能留空";
+            }
+        }
+        
+        $this->view("api/JsonAPI", $result);
     }
 
     public function login() {
@@ -412,50 +493,6 @@ class ShopController extends Controller {
             $data["total"] += $item["price"] * $item["value"];
         }
         $this->view("shop/orderDetail", $data);
-    }
-
-    public function changePassword() {
-        $result = [];
-
-        if( $_POST["changedPassword"] == "" ) {
-            $result["changedPassword"] = "此欄位不能留空";  
-        } else {
-            if( $_POST["changedPassword"] != $_POST["changedPasswordCheck"] ) {
-                $result["changedPasswordCheck"] = "此欄位必須與上欄輸入的密碼相同"; 
-            }
-        }
-
-        if( $_POST["changedPasswordCheck"] == "" ) {
-            $result["changedPasswordCheck"] = "此欄位不能留空";
-        }
-
-        if( $_POST["password"] == "" ) {
-            $result["password"] = "此欄位不能留空";  
-        } else {
-            if( $_POST["password"] != $_POST["passwordCheck"] ) {
-                $result["passwordCheck"] = "此欄位必須與上欄輸入的密碼相同"; 
-            }
-        }
-
-        if( $_POST["passwordCheck"] == "" ) 
-            $result["passwordCheck"] = "此欄位不能留空";
-        
-        if( count($result) == 0 ) {
-            $user = $this->model("User");
-            $user->load(["password"], $_SESSION["userId"] );
-            if( hash( "sha256", $_POST["password"]) == $user->password )  {
-                $user->password = hash( "sha256", $_POST["changedPassword"]);
-                $user->save(["password"],  $_SESSION["userId"]);
-                $result["success"] = true;
-            } else {
-                $result["password"] = "密碼錯誤"; 
-                $result["success"] = false;
-            }
-        } else {
-            $result["success"] = false;
-        }
-
-        $this->view("api/JsonAPI", $result);
     }
     
     public function default() {

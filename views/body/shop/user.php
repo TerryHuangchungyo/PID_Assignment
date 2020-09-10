@@ -3,7 +3,7 @@
     <div class="col-2">
         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
             <a class="nav-link active" id="v-order-tab" data-toggle="pill" href="#v-pills-order" role="tab">訂單記錄</a>
-            <a class="nav-link" id="v-setting-tab" data-toggle="pill" href="#v-pills-setting" role="tab" >帳戶設定</a>
+            <!-- <a class="nav-link" id="v-setting-tab" data-toggle="pill" href="#v-pills-setting" role="tab" >帳戶設定</a> -->
             <a class="nav-link" id="v-changePassword-tab" data-toggle="pill" href="#v-pills-changePassword" role="tab">更改密碼</a>
         </div>
     </div>
@@ -40,40 +40,69 @@
                     </table>
                 </div>
             </div>
-            <div class="tab-pane fade" id="v-pills-setting" role="tabpanel">
+            <!-- <div class="tab-pane fade" id="v-pills-setting" role="tabpanel">
                 <div class="container">
                     <h5>帳戶設定</h5><hr>
-                    <div class="row my-2">
+                    <h6 id="settingSuccess" class="text-success">更改成功</h6>
+                    <div class="row my-2 setting">
                         <div class="text-right col-2 pt-2">帳戶名稱:</div>
                         <div class="col-3">
-                            <input type="text" class="form-control" id="userName">
+                            <input type="text" value="<?=$data["user"]->name?>" class="form-control" name="name">
+                            <div class="pt-2">
+                                <span><?=$data["user"]->name?></span>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <button class="modify align-baseline btn btn-link text-success">修改</button>
+                            <button class="cancel align-baseline btn btn-link text-danger">取消</button>
                         </div>
                     </div>
-                    <div class="row my-2">
+                    <div class="row my-2 setting">
                         <div class="text-right col-2 pt-2">生日:</div>
                         <div class="col-3">
-                            <input type="date" class="form-control" id="userName">
+                            <input type="date" value="<?=$data["user"]->birthDate?>" class="form-control" name="birthDate">
+                            <div class="pt-2">
+                                <span><?=$data["user"]->birthDate?></span>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <button class="modify align-baseline btn btn-link text-success">修改</button>
+                            <button class="cancel align-baseline btn btn-link text-danger">取消</button>
                         </div>
                     </div>
-                    <div class="row my-2">
+                    <div class="row my-2 setting">
                         <div class="text-right col-2 pt-2">信箱:</div>
                         <div class="col-3">
-                            <input type="email" class="form-control" id="userName">
+                            <input type="email" value="<?=$data["user"]->email?>" class="form-control" name="email">
+                            <div class="pt-2">
+                                <span><?=$data["user"]->email?></span>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <button class="modify align-baseline btn btn-link text-success">修改</button>
+                            <button class="cancel align-baseline btn btn-link text-danger">取消</button>
                         </div>
                     </div>
-                    <div class="row my-2">
+                    <div class="row my-2 setting">
                         <div class="text-right col-2 pt-2">電話:</div>
                         <div class="col-3">
-                            <input type="text" class="form-control" id="userName">
+                            <input type="text" value="<?=$data["user"]->phone?>" class="form-control" name="phone">
+                            <div class="pt-2">
+                                <span><?=$data["user"]->phone?></span>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <button class="modify align-baseline btn btn-link text-success">修改</button>
+                            <button class="cancel align-baseline btn btn-link text-danger">取消</button>
                         </div>
                     </div>
                     <div class="row my-3">
-                        <div class="offset-2 col-3">
+                        <div class="offset-3 col-3">
                         <button id="settingSubmit" type="submit" class="float-right btn btn-dark">提交修改</button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="tab-pane fade" id="v-pills-changePassword" role="tabpanel" >
                 <div class="container w-50">
                     <h5>更改密碼</h5><hr>
